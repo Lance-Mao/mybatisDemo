@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper    
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserMapper">
+	<!--&lt;!&ndash; 根据用户ID查询用户信息 &ndash;&gt;-->
+	<!--<select id="findUserById" parameterType="int" resultType="User">-->
+		<!--SELECT-->
+		<!--* FROM USER WHERE id =#{id}-->
+	<!--</select>-->
+
+	<!--&lt;!&ndash; 添加用户 &ndash;&gt;-->
+	<!--<insert id="insertUser" parameterType="config.mybatis.po.User">-->
+		<!--<selectKey keyProperty="id" resultType="int" order="AFTER">-->
+			<!--SELECT-->
+			<!--LAST_INSERT_ID()-->
+		<!--</selectKey>-->
+
+		<!--INSERT INTO USER-->
+		<!--(username,birthday,sex,address)-->
+		<!--VALUES(#{username},#{birthday},#{sex},#{address})-->
+	<!--</insert>-->
+
+   <!--
+		type：resultMap最终映射的java对象类型,可以使用别名
+		id：对resultMap的唯一标识
+   -->
+	<resultMap id="BaseResultMap" type="pojo.User">
+		<!-- id表示查询结果集中唯一标识
+	 	column：查询出来的列名
+	 	property：type指定的pojo类型中的属性名
+	 	最终resultMap对column和property作一个映射关系 （对应关系）
+	 	-->
+		<id column="id" property="id"></id>
+		<!--
+	 	result：对普通名映射定义
+	 	column：查询出来的列名
+	 	property：type指定的pojo类型中的属性名
+	 	最终resultMap对column和property作一个映射关系 （对应关系）
+	 	 -->
+		<result column="username" property="username"></result>
+		<result column="birthday" property="birthday"></result>
+		<result column="sex" property="sex"></result>
+		<result column="address" property="address"></result>
+	</resultMap>
+
+	<!--    public List<Map<String, Object>> likeFindUserByName();-->
+	<select id="likeFindUserByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select * from user
+		WHERE username
+		LIKE '%${value}%'
+	</select>
+
+	<!-- public List<User> findUserByIdAndName(Integer id, String name);-->
+	<select id="findUserByIdAndName" resultMap="BaseResultMap">
+		select * from user WHERE id = #{id} AND username = #{name}
+	</select>
+
+	<!--    public List<User> findUserByMap(Map<String, Object> map);-->
+	<select id="findUserByMap" resultMap="BaseResultMap">
+		select * from user WHERE id = #{id} and username = #{name};
+	</select>
+
+	<!--public List<User> listLike(String name);-->
+	<select id="listLike" resultMap="BaseResultMap">
+		select * from user WHERE username LIKE #{name};
+	</select>
+
+	<!--Map<String, Object> returnMap(Integer id);-->
+	<select id="returnMap" resultType="map">
+		select * from user WHERE id = #{id};
+	</select>
+
+	<!--Map<Integer, User> returnMap2(String name);-->
+	<select id="returnMap2" resultType="pojo.User">
+		select * from user WHERE username LIKE #{name};
+	</select>
+</mapper>
+
